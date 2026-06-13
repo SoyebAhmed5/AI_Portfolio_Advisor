@@ -1,0 +1,90 @@
+/* Custom file input styles */
+.custom-file-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  position: relative;
+}
+.custom-file-input input[type="file"] {
+  display: none !important;
+}
+.custom-file-input label {
+  background: #2563eb;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.custom-file-input label:hover {
+  background: #1d4ed8;
+}
+.custom-file-input #fileName {
+  color: #374151;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+body.dark .custom-file-input {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.dark .custom-file-input #fileName {
+  color: #f1f5f9;
+}
+
+/* Compare modal table header for dark mode */
+body.dark #compareModal th {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+}
+body.dark #compareModal tr {
+  border-color: #475569 !important;
+}
+
+.linkedin-section {
+  background: #0077b5;
+  color: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem 1.25rem 2rem 1.25rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.linkedin-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.pretty-box {
+  background: rgba(255,255,255,0.10);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.pretty-list {
+  list-style: disc inside;
+  font-size: 1.1rem;
+  line-height: 2;
+  color: #e0e7ef;
+  margin: 0;
+  padding: 0;
+}
+
+.pretty-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+} 

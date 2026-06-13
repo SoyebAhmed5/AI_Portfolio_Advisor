@@ -1,11 +1,791 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Advisor AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="skillAssessment.js"></script>
+    <script type="module" src="courseSyllabus.js"></script>
+    <script type="module" src="script.js"></script>
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            --modal-bg: #ffffff;
+            --modal-overlay: rgba(0,0,0,0.5);
+            --button-bg: #2563eb;
+            --button-text: #ffffff;
+            --button-hover: #1d4ed8;
+        }
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-color: #3b82f6;
+            --accent-hover: #60a5fa;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            --modal-bg: #1e293b;
+            --modal-overlay: rgba(31,41,55,0.85);
+            --button-bg: #334155;
+            --button-text: #f3f4f6;
+            --button-hover: #475569;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .dark .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .loading {
+            display: none;
+        }
+        .loading.active {
+            display: flex;
+        }
+        #output {
+            display: none;
+        }
+        #output.active {
+            display: block;
+        }
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .dark .badge-blue {
+            background-color: #1e3a8a;
+            color: #93c5fd;
+        }
+        .dark .badge-green {
+            background-color: #064e3b;
+            color: #6ee7b7;
+        }
+        .dark .badge-purple {
+            background-color: #5b21b6;
+            color: #e9d5ff;
+        }
+        .badge-blue {
+            background-color: #e3f2fd;
+            color: #1e88e5;
+        }
+        .badge-green {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+        .badge-purple {
+            background-color: #f3e5f5;
+            color: #8e24aa;
+        }
+        .dark textarea,
+        .dark input {
+            background-color: #374151;
+            color: #f3f4f6;
+            border-color: #4b5563;
+        }
+        .dark textarea:focus,
+        .dark input:focus {
+            border-color: #60a5fa;
+        }
+        .dark .text-gray-600 {
+            color: #9ca3af !important;
+        }
+        .dark .text-gray-700 {
+            color: #d1d5db !important;
+        }
+        .dark .text-gray-800 {
+            color: #f3f4f6 !important;
+        }
+        .dark .hover\:bg-gray-50:hover {
+            background-color: #4b5563 !important;
+        }
+        /* Modal and overlay */
+        .dark .bg-white,
+        .dark .modal-content {
+            background-color: var(--modal-bg) !important;
+            color: var(--text-primary) !important;
+        }
+        .dark .modal-overlay {
+            background: var(--modal-overlay) !important;
+        }
+        .modal-overlay {
+            background: var(--modal-overlay);
+        }
+        /* Buttons */
+        button,
+        .btn {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            transition: background 0.2s, color 0.2s;
+        }
+        button:hover,
+        .btn:hover {
+            background-color: var(--button-hover);
+        }
+        .dark .bg-gray-800 {
+            background-color: #334155 !important;
+        }
+        .dark .text-white {
+            color: #f3f4f6 !important;
+        }
+        .dark .text-blue-600 {
+            color: #60a5fa !important;
+        }
+        .dark .text-red-600 {
+            color: #f87171 !important;
+        }
+        .dark .text-blue-800 {
+            color: #3b82f6 !important;
+        }
+        .dark .text-gray-500 {
+            color: #6b7280 !important;
+        }
+        /* Action buttons and floating buttons */
+        #actionButtons button,
+        .fixed button,
+        .fixed .btn {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+        }
+        #actionButtons button:hover,
+        .fixed button:hover,
+        .fixed .btn:hover {
+            background-color: var(--button-hover);
+        }
+        /* History modal improvements */
+        #historyList > div {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+        /* Share modal improvements */
+        #shareModal > div {
+            background: var(--modal-bg);
+            color: var(--text-primary);
+        }
+        /* Salary chart background */
+        .dark #salaryChart {
+            background: #1e293b;
+        }
+        /* Checkbox and radio in dark mode */
+        .dark input[type="checkbox"],
+        .dark input[type="radio"] {
+            accent-color: #60a5fa;
+        }
+        /* Scrollbar for dark mode */
+        .dark ::-webkit-scrollbar {
+            background: #374151;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+        /* Toggle button styles */
+        #darkModeToggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            background: var(--bg-secondary);
+        }
+        /* Add new styles */
+        .main-container {
+            display: grid;
+            grid-template-columns: minmax(350px, 400px) 1fr;
+            gap: 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 1rem;
+            height: calc(100vh - 64px);
+        }
+
+        .input-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .output-section {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-field {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .linkedin-section {
+            background: #0077b5;
+            color: white;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .linkedin-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .linkedin-steps {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .linkedin-steps ul {
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .linkedin-steps li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .file-input-wrapper {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            border-radius: 1rem;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .loading-content .spinner {
+            width: 4rem;
+            height: 4rem;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .history-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .history-skills {
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-goals {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-date {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .history-btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.4rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .skill-tag {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0.25rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* History button styles */
+        .history-button {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+
+        .history-button:hover {
+            transform: scale(1.1);
+            background: var(--bg-secondary);
+        }
+
+        /* History modal styles */
+        .history-modal {
+            position: fixed;
+            inset: 0;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 1rem;
+        }
+
+        .history-modal-content {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .history-modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-modal-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            padding: 1.25rem;
+            overflow-y: auto;
+            max-height: calc(80vh - 4rem);
+        }
+
+        .no-history {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.dark #compareModal th {
+            background: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen transition-colors duration-300">
+    <!-- Header with action buttons -->
+    <header class="sticky top-0 z-40 bg-opacity-90 backdrop-blur-sm" style="background: var(--bg-primary);">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold">Career Advisor AI</h1>
+                <div class="flex items-center space-x-3">
+                    <button id="exportBtn" class="btn btn-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-file-export"></i>
+                        <span>Export</span>
+                    </button>
+                    <button id="shareBtn" class="btn btn-secondary" onclick="shareResults()">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
+                    <button id="compareBtn" class="btn btn-secondary" onclick="compareCareerPaths()">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Compare</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="uploadStatus" class="upload-status hidden"></div>
+
+    <!-- Main content -->
+    <div class="main-container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <form id="advisorForm" class="space-y-6">
+                <div>
+                    <label class="section-title">
+                        <i class="fas fa-code"></i>
+                        Your Skills
+                    </label>
+                    <textarea id="skills" class="input-field" rows="3" 
+                        placeholder="Enter your technical skills (e.g., Python, SQL, Excel)"></textarea>
+                    <div id="skillsContainer" class="flex flex-wrap gap-2 mt-2"></div>
+                </div>
+
+                <div>
+                    <label class="section-title">
+                        <i class="fas fa-star"></i>
+                        Career Goals
+                    </label>
+                    <textarea id="goals" class="input-field" rows="3"
+                        placeholder="Describe your career goals and interests"></textarea>
+                </div>
+
+                <!-- LinkedIn Section -->
+                <div class="linkedin-section">
+                    <h3>
+                        <i class="fab fa-linkedin"></i>
+                        Import LinkedIn Profile
+                    </h3>
+                    <div class="linkedin-steps pretty-box">
+                        <ul class="pretty-list">
+                            <li>Go to your LinkedIn profile</li>
+                            <li>Click on "More..." button (three dots)</li>
+                            <li>Select "Save to PDF"</li>
+                            <li>Upload the downloaded PDF below</li>
+                        </ul>
+                    </div>
+                    <div class="custom-file-input" style="margin-bottom: 1.5rem;">
+                        <input type="file" id="linkedinPdf" accept=".pdf" style="display: none;" />
+                        <label for="linkedinPdf" id="fileLabel" style="background: #fff; color: #0077b5; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; border: 1px solid #0077b5;">Choose File</label>
+                        <span id="fileName" style="color: #fff; margin-left: 1rem;">No file chosen</span>
+                    </div>
+                    <button type="button" id="extractBtn" class="btn btn-primary w-full" disabled style="margin-top: 1rem;">
+                        <i class="fas fa-file-import"></i>
+                        Extract Skills
+                    </button>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit" id="analyzeBtn" class="btn btn-primary flex-1">
+                        <i class="fas fa-magic"></i>
+                        Get Advice
+                    </button>
+                    <button type="button" id="assessmentBtn" class="btn btn-secondary flex-1">
+                        <i class="fas fa-clipboard-list"></i>
+                        Take Assessment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-section relative">
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay hidden">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <div class="text-center space-y-2">
+                        <p class="text-xl font-semibold text-white">Please upload your details to analyze</p>
+                        <p class="text-sm text-gray-300">We'll help you create your perfect career path</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="output" class="hidden space-y-6">
+                <!-- Summary -->
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4" id="summary"></h2>
+                </div>
+
+                <!-- Career Paths -->
+                <div class="section-card">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-briefcase mr-2"></i>
+                        <span id="careerPathsTitle"></span>
+                    </h3>
+                    <div id="careerPaths" class="grid gap-4"></div>
+                </div>
+
+                <!-- Job Search Section -->
+                <div class="section-card">
+                    <div id="jobSearchSection"></div>
+                </div>
+
+                <!-- Salary Chart -->
+                <div id="salaryChart" class="section-card">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-chart-bar mr-2"></i>Salary Insights
+                    </h3>
+                    <canvas id="salaryComparison"></canvas>
+                </div>
+
+                <!-- Learning Path -->
+                <div class="section-card">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-graduation-cap mr-2"></i>
+                        <span id="learningPathTitle"></span>
+                    </h3>
+                    <button id="downloadCourseBtn" class="btn btn-secondary mb-4" type="button">
+                        <i class="fas fa-download"></i>
+                        Download Course Syllabus
+                    </button>
+                    <div id="learningPath" class="space-y-4"></div>
+                </div>
+
+                <!-- Projects -->
+                <div class="section-card">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-project-diagram mr-2"></i>
+                        <span id="projectsTitle"></span>
+                    </h3>
+                    <div id="projects" class="grid gap-4"></div>
+                </div>
+
+                <!-- Resources -->
+                <div class="section-card">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-book mr-2"></i>
+                        <span id="resourcesTitle"></span>
+                    </h3>
+                    <div id="resources">
+                        <div id="courses" class="mb-6"></div>
+                        <div id="tools"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Modals -->
+    <div id="shareModal" class="modal hidden">
+        <!-- ... existing share modal content ... -->
+    </div>
+
+    <!-- History Button -->
+    <button id="historyBtn" class="history-button" aria-label="View history">
+        <i class="fas fa-history"></i>
+    </button>
+
+    <!-- History Modal -->
+    <div class="history-modal" id="historyModal" style="display:none;">
+        <div class="history-modal-content">
+            <div class="history-modal-header">
+                <h2>Chat History</h2>
+                <button type="button" class="close-modal-btn" onclick="document.getElementById('historyModal').style.display='none';">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- History items will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Assessment Modal -->
+    <div id="assessmentModal" class="history-modal" style="display:none;">
+        <div class="history-modal-content" style="max-width:600px;">
+            <div class="history-modal-header">
+                <h2>Skill Assessment</h2>
+                <button type="button" class="close-modal-btn" onclick="document.getElementById('assessmentModal').style.display='none';">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div id="assessmentContent" class="p-4"></div>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
-  </body>
-</html>
+    <script src="script.js"></script>
+</body>
+</html> 

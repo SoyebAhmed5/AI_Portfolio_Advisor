@@ -1,0 +1,645 @@
+/* History Button */
+.history-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.history-button:hover {
+    transform: scale(1.1);
+    background-color: #0056b3;
+}
+
+.history-button i {
+    font-size: 1.5em;
+}
+
+/* History Modal */
+.history-modal {
+    display: none;  /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;  /* Ensure it's above everything */
+}
+
+.history-modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    position: relative;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.history-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-right: 40px;
+}
+
+.history-modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #1f2937;
+}
+
+.close-modal-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #4b5563;
+    transition: all 0.2s ease;
+    z-index: 10000;
+}
+
+.close-modal-btn:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+    transform: scale(1.1);
+}
+
+.close-modal-btn:active {
+    transform: scale(0.95);
+}
+
+.close-modal-btn span {
+    line-height: 1;
+    position: relative;
+    top: -2px;
+}
+
+/* Dark mode */
+.dark .close-modal-btn {
+    background: #374151;
+    color: #e5e7eb;
+}
+
+.dark .close-modal-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+}
+
+.history-list {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 70px);
+}
+
+.history-item {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.history-date {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.delete-history {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.delete-history:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.history-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-user-message,
+.history-ai-response {
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.history-user-message {
+    background-color: #e3f2fd;
+    align-self: flex-end;
+    max-width: 80%;
+}
+
+.history-ai-response {
+    background-color: #f5f5f5;
+    align-self: flex-start;
+    max-width: 80%;
+}
+
+.empty-history {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin: 20px 0;
+}
+
+/* Scrollbar Styling */
+.history-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Enhanced Cursor Styles */
+body {
+    cursor: default;
+}
+
+/* Interactive elements cursor styles */
+button,
+.btn,
+.close-modal,
+.history-button,
+.delete-history,
+input[type="checkbox"],
+input[type="radio"],
+.file-input-wrapper,
+#darkModeToggle {
+    cursor: pointer !important;
+}
+
+/* Text input cursor */
+input[type="text"],
+textarea,
+.input-field {
+    cursor: text;
+}
+
+/* Link cursor */
+a, .link {
+    cursor: pointer;
+}
+
+/* Loading cursor */
+.loading.active,
+button:disabled,
+.btn:disabled {
+    cursor: wait !important;
+}
+
+/* Resize cursor for textareas */
+textarea {
+    cursor: auto;
+    resize: vertical;
+}
+
+/* Not-allowed cursor for disabled elements */
+button:disabled,
+.btn:disabled,
+input:disabled {
+    cursor: not-allowed !important;
+}
+
+/* Custom hover effects with cursor changes */
+.history-button:hover,
+.btn:hover:not(:disabled),
+.close-modal:hover,
+.delete-history:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Grab cursor for draggable elements */
+.draggable {
+    cursor: grab;
+}
+
+.draggable:active {
+    cursor: grabbing;
+}
+
+/* Help cursor for tooltip elements */
+[data-tooltip] {
+    cursor: help;
+}
+
+/* Progress cursor for processing states */
+.processing {
+    cursor: progress;
+}
+
+/* Move cursor for draggable dialogs */
+.modal-header {
+    cursor: move;
+}
+
+/* Zoom-in cursor for zoomable images */
+.zoomable {
+    cursor: zoom-in;
+}
+
+.zoomed {
+    cursor: zoom-out;
+}
+
+/* Text selection cursor */
+.selectable {
+    cursor: text;
+    user-select: text;
+}
+
+.non-selectable {
+    cursor: default;
+    user-select: none;
+}
+
+/* Custom cursor transitions */
+button,
+.btn,
+.history-button,
+.close-modal,
+.delete-history {
+    transition: cursor 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Enhanced Input Sections */
+.input-section > form > div {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.input-section > form > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Skills Section */
+.input-section > form > div:first-child {
+    background: linear-gradient(145deg, #0077b5, #00a0dc);
+    color: white;
+}
+
+.input-section > form > div:first-child .section-title {
+    color: white;
+}
+
+.input-section > form > div:first-child .input-field {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.input-section > form > div:first-child .input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-section > form > div:first-child .input-field:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Career Goals Section */
+.input-section > form > div:nth-child(2) {
+    background: linear-gradient(145deg, #1a237e, #283593);
+    color: white;
+}
+
+.input-section > form > div:nth-child(2) .section-title {
+    color: white;
+}
+
+.input-section > form > div:nth-child(2) .input-field {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.input-section > form > div:nth-child(2) .input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-section > form > div:nth-child(2) .input-field:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* LinkedIn Section Enhancement */
+.linkedin-section {
+    background: linear-gradient(145deg, #0077b5, #00a0dc) !important;
+    border-radius: 16px !important;
+    padding: 25px !important;
+    box-shadow: 0 4px 15px rgba(0, 119, 181, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.linkedin-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 119, 181, 0.3) !important;
+}
+
+.linkedin-steps {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Interactive Elements Enhancement */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::after {
+    width: 300%;
+    height: 300%;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Skill Tags Enhancement */
+.skill-tag {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.skill-tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.skill-tag .remove-skill {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.skill-tag .remove-skill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Dark Mode Adjustments */
+.dark .input-section > form > div {
+    background: linear-gradient(145deg, #1e293b, #334155);
+}
+
+.dark .input-section > form > div:first-child {
+    background: linear-gradient(145deg, #0d47a1, #1565c0);
+}
+
+.dark .input-section > form > div:nth-child(2) {
+    background: linear-gradient(145deg, #1a237e, #283593);
+}
+
+.dark .linkedin-section {
+    background: linear-gradient(145deg, #0077b5, #0288d1) !important;
+}
+
+.dark .input-field {
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .input-field:focus {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Animation for Input Focus */
+@keyframes focusAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.input-field:focus {
+    animation: focusAnimation 4s ease infinite;
+    background-size: 200% 200%;
+}
+
+/* Dark mode */
+.dark .history-modal-content {
+    background: #1f2937;
+}
+
+.dark .history-modal-header h2 {
+    color: #f9fafb;
+}
+
+/* File Upload Styles */
+.file-input-wrapper {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+    position: relative;
+}
+
+.upload-status {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.upload-status.hidden {
+    display: none;
+}
+
+.upload-status-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-status i {
+    font-size: 16px;
+}
+
+/* Status Types */
+.upload-status.info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.upload-status.success {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.upload-status.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.upload-status.warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.upload-status.loading {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Dark mode adjustments */
+.dark .upload-status.info {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .upload-status.success {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.dark .upload-status.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.dark .upload-status.warning {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dark .upload-status.loading {
+    background-color: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* File input styling */
+input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    cursor: pointer;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    padding: 8px 12px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dark input[type="file"] {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark input[type="file"]::-webkit-file-upload-button {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark input[type="file"]::-webkit-file-upload-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+} 
